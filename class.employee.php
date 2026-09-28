@@ -1,0 +1,260 @@
+<?php 
+class employee{
+    function def(){
+        ?>
+        
+        <div class="container">
+            <div class ="row">
+                <div class = "col-12">
+                <h1>Employee Data</h1>
+                <form action="index.php" method="get">
+                        <input name="searcher">
+                        <input class="btn btn-secondary btn-sm" type="submit" value="Search">
+                        <input class="btn btn-info btn-sm" type="button" value="Add" onclick='window.open("index.php?option=employee&task=edit&id=0","_self")' />
+                        <input type="hidden" name="option" value="employee">
+                        <input type="hidden" name="task" value="def" >
+                    </from>
+                </div>
+                    <table id="datatable" class="table table-bordered table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="text-center"> No </th>
+                                <th class="text-center"> Name </th>
+                                <th class="text-center"> Status</th>
+                                <th class="text-center"> Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                 $sql = "SELECT * FROM employee ORDER BY id DESC";
+                                 $conn = new connect();
+                                 $a = 1;
+                                 $res = $conn->query($sql);
+                                 while($cdr=$res->fetch()){
+                                    echo "<tr>";
+                                    echo "<td>";
+                                    echo $a ;
+                                    echo "</td>";
+                                    echo "<td class='text text-center'>";
+                                    echo $cdr['name'], "&nbsp", $cdr['sirname'];
+                                    echo "</td>";
+                                    if($cdr['status'] == 1 ){
+                                        echo "<td class='text text-success text-center'>";
+                                        echo "พร้อมใช้งาน";
+                                        echo "</td>";
+                                        $active = "active";
+                                    }
+                                    else{
+                                        echo "<td class='text text-danger text-center'>";
+                                        echo "ไม่พร้อมใช้งาน";
+                                        echo "</td>";
+                                        $active = "";
+                                    }
+                                    echo "<td>";
+						            echo "<input class='btn btn-primary btn-sm' type='button' value='Detail' onclick='window.open(\"index.php?option=employee&task=det&id=".$cdr['id']."\",\"_self\")' />";
+                                    echo "<input class='btn btn-warning btn-sm' type='button' value='Edit' onclick='window.open(\"index.php?option=employee&task=edit&id=".$cdr['id']."\",\"_self\")' />";
+                                    echo "<input class='btn btn-danger btn-sm $active' type='button' value='active' onclick='confirm_del(\"index.php?option=employee&task=del&id=".$cdr['id']."&stat=".$cdr['status']."\",\"_self\")' />";
+                                    echo "</td>";
+                                    echo "</tr>";
+                                    $a++;
+                                 }
+                            ?>
+                        </tbody>
+        <?php 
+    }
+    function det(){
+        $id=$_REQUEST["id"];
+        $sql = "SELECT * FROM employee WHERE id = $id ";
+        $conn = new connect();
+        $res = $conn->query($sql);
+        while($cdr=$res->fetch()){
+            $id = $cdr["id"];
+            $name = $cdr['name'];
+            $sirname =  $cdr['sirname'];
+            $birthday = $cdr['birthday'];
+            $address = $cdr['address'];
+            $email = $cdr['email'];
+            $tel = $cdr['phone'];
+        }
+        ?>
+        <div class="container">
+            <div class ="row">
+                <div class = "col-12">
+                <form action='index.php' method='get'>
+                    <table class= "table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th colspan="2" class="text-center">Detail Employee Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>id</td>
+                                <td><?php echo $id ;?></td>
+                            </tr>
+                            <tr>
+                                <td>ชื่อ</td>
+                                <td><?php echo $name, "&nbsp", $sirname ;?></td>
+                            </tr>
+                            <tr>
+                                <td>วันเกิด</td>
+                                <td><?php echo $birthday ;?></td>
+                            </tr>
+                            <tr>
+                                <td>ที่อยู่</td>
+                                <td><?php echo $address ;?></td>
+                            </tr>
+                            <tr>
+                                <td>อีเมลติดต่อ</td>
+                                <td><?php echo $email ;?></td>
+                            </tr>
+                            <tr>
+                                <td>เบอร์โทรติดต่อ</td>
+                                <td><?php echo $tel ;?></td>
+                            </tr>
+                            <tr>
+							<td colspan='2' class='text-center'>
+								<input class='btn btn-secondary btn-sm' type='button' value='Back' onclick='window.open("index.php?option=employee&task=def","_self")' />
+							</td>
+						</tr>
+                        </tbody>
+                    </table>
+                    <form>
+                </div>
+            </div>
+        </div>
+        <?php 
+    }
+    function edit(){
+        $id=$_REQUEST["id"];
+        if($id==0){
+            $func = "Add Data Employee";
+            $name = "";
+            $sirname = "";
+            $birthday = "";
+            $address = "";
+            $email = "";
+            $tel = "";
+        }
+        else{
+            $func = "Edit Data Employee";
+            $sql = "SELECT * FROM employee WHERE id = $id";
+            $conn = new connect();
+            $res = $conn->query($sql);
+            $cdr=$res->fetch();
+            $id = $cdr['id'];
+            $name = $cdr['name'];
+            $sirname = $cdr['sirname'];
+            $birthday = $cdr['birthday'];
+            $address = $cdr['address'];
+            $email = $cdr['email'];
+            $tel = $cdr['phone'];
+        }
+        ?>
+        <div class="container">
+            <div class ="row">
+                <div class = "col-12">
+                <form action='index.php' method='get'>
+                    <table class= "table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th colspan="2" class="text-center"><?php echo $func; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            if($id > 0){
+                                echo "<tr>";
+                                echo "<td>id</td>";
+                                echo "<td> $id </td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                            <tr>
+                                <td>ชื่อ</td>
+                                <td><input class="form-control-sm" name="name" type="text" placeholder="ใส่ชื่อพนักงาน" maxlength="50" value="<?php echo $name ?>" required></td>
+                            </tr>
+                            <tr>
+                                <td>นามสกุล</td>
+                                <td><input class="form-control-sm" name="sirname" type="text" placeholder="ใส่นามสกุลพนักงาน" maxlength="50" value="<?php echo $sirname ?>" required></td>
+                            </tr>
+                            <tr>
+                                <td>วันเกิด</td>
+                                <td><input class="form-control-sm" name="birthday" type="date" placeholder="ใส่วันเกิด" value="<?php echo $birthday ?>" required></td>
+                            </tr>
+                            <tr>
+                                <td>ที่อยู่</td>
+                                <td><input class="form-control" type="text" name="address" placeholder="ใส่ที่อยู่" maxlength="255" value="<?php echo $address ;?>" required></td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td><input type="email" name="email" class="form-control-sm" placeholder="ใส่email" maxlength="100" value="<?php echo $email; ?>" required></td>
+                            </tr>
+                            <tr>
+                                <td>เบอร์โทรติดต่อ</td>
+                                <td><input class="form-control-sm" type="tel" id="phone" name="tel" placeholder="ใส่เบอร์โทรศัพท์" maxlength="10" value="<?php echo $tel;?>" pattern="[0-9]{10}" title="ใส่เบอร์โทร 10 หลัก" required></td>
+                            </tr>
+                            <tr>
+							<td colspan='2' class='text-center'>
+								<input type='hidden' name="option" value='employee' />
+								<input type='hidden' name="task" value='save' />
+								<input type='hidden' name="id" value='<?php echo $id;?>' />
+								<input class='btn btn-primary btn-sm' type='submit' value='Save' />
+								<input class='btn btn-secondary btn-sm' type='button' value='Back' onclick='window.open("index.php?option=employee&task=def","_self")' />
+							</td>
+						</tr>
+                        </tbody>
+                    </table>
+                </from>
+                </div>
+            </div>
+        </div> 
+<?php   
+    }
+    function del(){
+        $id = $_REQUEST['id'];
+        $stat = $_REQUEST['stat'];
+        if($stat == 1){
+		    $sql = "update `employee` set `status` = '0' where `id` = '".$id."'";
+		    $conn = new connect();
+		    $conn->query($sql);
+		    header("location:index.php?option=employee&task=def");
+        }
+        else if($stat == 0){
+            $sql = "update `employee` set `status` = '1' where `id` = '".$id."'";
+		    $conn = new connect();
+		    $conn->query($sql);
+		    header("location:index.php?option=employee&task=def");
+        }
+    }
+
+    function save(){
+        $id = $_REQUEST['id'];
+        $name = $_REQUEST['name'];
+        $sirname = $_REQUEST['sirname'];
+        $birthday = $_REQUEST['birthday'];
+        $address = $_REQUEST['address'];
+        $email = $_REQUEST['email'];
+        $tel = $_REQUEST['tel'];
+        
+        $conn = new connect();
+        if($id == 0 ){
+            $sql = "INSERT INTO employee (name, sirname, birthday, address, email, phone, status) VALUE ('$name', '$sirname', '$birthday', '$address', '$email', '$tel', '1')";
+            $conn->query($sql);
+            header("location:index.php?option=employee&task=def");
+            $conn->alert("บันทึกข้อมูลสำเร็จ", 1);
+        }
+        else if($id > 0 ){
+            $sql = "UPDATE employee SET name = '$name', sirname = '$sirname', birthday = '$birthday', address = '$address', email = '$email', phone = '$tel' WHERE id = '$id'";
+            $conn->query($sql);    
+            header("location:index.php?option=employee&task=def");
+            $conn->alert("บันทึกข้อมูลสำเร็จ", 1);
+        }
+        else{
+            header("location:index.php?option=employee&task=def");
+            $conn->alert("มีข้อผิดพลาดโปรกรอกข้อมูลใหม่", 2);
+        }
+    }
+}
+
+?>

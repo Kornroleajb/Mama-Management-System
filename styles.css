@@ -1,0 +1,7 @@
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #d9f2ff; /* สีฟ้าอ่อน */
+  }
+  
+  .table-striped tbody tr:hover {
+    background-color: #b3e6ff; /* สีฟ้าสว่างเมื่อ hover */
+  }
