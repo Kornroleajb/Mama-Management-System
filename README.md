@@ -36,6 +36,6 @@ The system was designed to manage product-related operations, including purchasi
 
 This project was developed during my early years at university to practice web application development and database management. It focuses on managing product, purchasing, inventory, and production processes within a single system.
 
-## Author
+## Project Team
 
-Theerapat Pokkaew
+Developed as a group project during university coursework.
